@@ -31,7 +31,7 @@
 #define RVIZ_GOAL_TOOL_H
 
 #ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829
-# include <QObject>
+# include <QObject> 
 
 # include <ros/ros.h>
 
@@ -43,30 +43,35 @@ namespace rviz
 class Arrow;
 class DisplayContext;
 class StringProperty;
+class BoolProperty;  // added
 
-class GoalTool: public PoseTool
+class GoalTool : public PoseTool
 {
-Q_OBJECT
+        Q_OBJECT
 public:
-  GoalTool();
-  virtual ~GoalTool() {}
-  virtual void onInitialize();
+        GoalTool();
+        virtual ~GoalTool() {
+        }
+        virtual void onInitialize();
+        virtual int processMouseEvent( ViewportMouseEvent& event ); // added
 
 protected:
-  virtual void onPoseSet(double x, double y, double theta);
+        virtual void onPoseSet(double x, double y, double theta);
 
 private Q_SLOTS:
-  void updateTopic();
+        void updateTopic();
+        void updateAutoDeactivate(); // added
 
 private:
-  ros::NodeHandle nh_;
-  ros::Publisher pub_;
+        ros::NodeHandle nh_;
+        ros::Publisher pub_;
 
-  StringProperty* topic_property_;
+        StringProperty* topic_property_;
+
+protected:  // added
+        BoolProperty* auto_deactivate_property_; // added
 };
 
 }
 
 #endif
-
-
